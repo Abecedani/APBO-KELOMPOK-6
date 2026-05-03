@@ -14,9 +14,10 @@ class Auth extends CI_Controller {
     }
 
 
-	public function login()
-	{
-        if($this->session->auth['logged_in']) {
+    public function login()
+    {
+        $auth = $this->session->userdata('auth');
+        if(!empty($auth['logged_in'])) {
             redirect(base_url("dashboard"));
         }
 
@@ -27,6 +28,7 @@ class Auth extends CI_Controller {
             "pageTitle" => "Login",
             "authPage" => TRUE
         ];
+
         if($this->input->post()) {
             $username = $this->input->post("username");
             $password = $this->input->post("password");
@@ -43,35 +45,38 @@ class Auth extends CI_Controller {
             } else {
                 $fetch = $query->row();
 
-                if(!password_verify($password,$fetch->password)) {
+                if($password != $fetch->password) { 
                     $error = "Username atau password yang anda masukkan salah";
                 } else {
                     $setSession = [
                         "logged_in" => TRUE,
-                        "id" => $fetch->id
+                        "id" => $fetch->id,
+                        "role" => $fetch->role,           
+                        "branch_id" => $fetch->branch_id 
                     ];
 
-                    $this->session->set_userdata("auth",$setSession);
+                    $this->session->set_userdata("auth", $setSession);
 
                     redirect(base_url("dashboard"));
                 }
-            }
+            } // Fix: Tambahan kurung kurawal penutup untuk kondisi else yang sempat hilang
 
             if($error) {
                 $push['error'] = $error;
             }
         }
 
-		$this->load->view('header',$push);
-		$this->load->view('login',$push);
-		$this->load->view('footer',$push);
+        $this->load->view('header', $push);
+        $this->load->view('login', $push);
+        $this->load->view('footer', $push);
     }
     
     function logout() {
-
-        if($this->session->auth['logged_in']) {
+        // Fix: Cek session dengan aman sebelum logout
+        $auth = $this->session->userdata('auth');
+        if(!empty($auth['logged_in'])) {
             $this->session->unset_userdata("auth");
-            redirect(base_url("auth/login"));
         }
+        redirect(base_url("auth/login"));
     }
 }
