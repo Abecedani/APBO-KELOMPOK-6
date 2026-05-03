@@ -3,7 +3,7 @@
             <div class="login-content">
                 <div class="login-logo">
                     <a href="#" style="color:#FFF;font-size: 28px">
-                        <?=$this->shop_info->get_shop_name();?>
+                        Login
                     </a>
                 </div>
                 <div class="login-form">
