@@ -7,18 +7,12 @@ class Shop_info {
         $this->ci =& get_instance();
         $auth = $this->ci->session->userdata('auth');
         
-        // 2. Cek apakah user sudah login dan punya branch_id
         if (!empty($auth['branch_id'])) {
             $branch_id = $auth['branch_id'];
-            // Ambil data cabang sesuai user yang login
             $this->get_info = $this->ci->db->get_where("branches", ["id" => $branch_id])->row();
         } else {
-            // 3. Fallback: Kalau belum login (misal di halaman depan/login), 
-            // ambil data cabang pertama saja sebagai default
             $this->get_info = $this->ci->db->get("branches")->row();
         }
-
-        // 4. Pengaman darurat kalau tabel branches kosong biar web nggak blank
         if (!$this->get_info) {
             $this->get_info = (object) [
                 'name' => 'BENGKEL LAS PAK ZAKI',

@@ -59,7 +59,7 @@ class Auth extends CI_Controller {
 
                     redirect(base_url("dashboard"));
                 }
-            } // Fix: Tambahan kurung kurawal penutup untuk kondisi else yang sempat hilang
+            } 
 
             if($error) {
                 $push['error'] = $error;
