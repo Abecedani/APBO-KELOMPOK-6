@@ -1,4 +1,4 @@
-        <div class="breadcrumbs">
+<div class="breadcrumbs">
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
@@ -21,7 +21,10 @@
         <div class="content mt-3">
             <div class="card">
                 <div class="card-header">
-                    <a href="<?=base_url("purchase/new");?>" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Tambah</a>
+                    <!-- PAGAR PENGAMAN: Cuma muncul kalau yang login itu Admin -->
+                    <?php if($this->session->userdata('auth')['role'] == 'admin'): ?>
+                        <a href="<?=base_url("purchase/new");?>" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Tambah</a>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

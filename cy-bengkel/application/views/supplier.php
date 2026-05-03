@@ -1,4 +1,4 @@
-        <div class="breadcrumbs">
+<div class="breadcrumbs">
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
@@ -21,7 +21,10 @@
         <div class="content mt-3">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-sm btn-success btn-add"><i class="fa fa-plus"></i> Tambah Supplier</button>
+                    <!-- PAGAR PENGAMAN: Cuma muncul kalau yang login itu Admin -->
+                    <?php if($this->session->userdata('auth')['role'] == 'admin'): ?>
+                        <button type="button" class="btn btn-sm btn-success btn-add"><i class="fa fa-plus"></i> Tambah Supplier</button>
+                    <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

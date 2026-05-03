@@ -74,15 +74,21 @@ if(!$authPage) {
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="<?=base_url();?>"><?=$this->shop_info->get_shop_name();?></a>
+                <a class="navbar-brand" href="<?=base_url();?>">CV. Gaspol Rem Blong</a>
                 <a class="navbar-brand hidden" href="<?=base_url();?>">B</a>
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <!-- Ambil Role dari Session -->
+                <?php $user_role = $this->session->userdata('auth')['role']; ?>
+                
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="<?=base_url("dashboard");?>"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
+                    
+                  <!-- MENU TRANSAKSI: Di-hide dari Owner -->
+                  <?php if($user_role != 'owner'): ?>
                   <h3 class="menu-title">Transaksi</h3>
                     <li>
                         <a href="<?=base_url("transaction");?>"> <i class="menu-icon fa fa-plus-square"></i>Tambah Transaksi</a>
@@ -93,6 +99,10 @@ if(!$authPage) {
                     <li>
                         <a href="<?=base_url("service_sales");?>"> <i class="menu-icon fa fa-list"></i>Riwayat Service</a>
                     </li>
+                  <?php endif; ?>
+
+                  <!-- MENU DATA MASTER: Hanya untuk Admin dan Owner -->
+                  <?php if($user_role == 'admin' || $user_role == 'owner'): ?>
                   <h3 class="menu-title">Data & Laporan</h3>
                     <li>
                         <a href="<?=base_url("sparepart");?>"> <i class="menu-icon fa fa-archive"></i>Data Sparepart </a>
@@ -106,6 +116,10 @@ if(!$authPage) {
                     <li>
                         <a href="<?=base_url("purchase");?>"> <i class="menu-icon fa fa-shopping-cart"></i>Data Pembelian Stock </a>
                     </li>
+                  <?php endif; ?>
+
+                  <!-- MENU LAPORAN: Hanya untuk Owner dan Admin -->
+                  <?php if($user_role == 'owner' || $user_role == 'admin'): ?>
                     <h3 class="menu-title">Laporan</h3>
                     <li>
                         <a href="<?=base_url("report/sales");?>"> <i class="menu-icon fa fa-bar-chart-o"></i>Laporan Penjualan</a>
@@ -116,6 +130,7 @@ if(!$authPage) {
                     <li>
                         <a href="<?=base_url("report/purchase");?>"> <i class="menu-icon fa fa-bar-chart-o"></i>Laporan Pembelian</a>
                     </li>
+                  <?php endif; ?>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -140,16 +155,22 @@ if(!$authPage) {
 
                 <div class="col-sm-5">
                     <div class="user-area dropdown float-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        
+                        <!-- Query Langsung ke Database untuk Tarik Nama User -->
+                        <?php 
+                            $user_id = $this->session->userdata('auth')['id'];
+                            $user_data = $this->db->get_where('users', ['id' => $user_id])->row();
+                            // Ngecek ada kolom 'name' ga, kalau gaada pakai 'username'
+                            $display_name = isset($user_data->name) ? $user_data->name : (isset($user_data->username) ? $user_data->username : 'User');
+                        ?>
+                        
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+                            <span style="font-weight: 600; color: #6c757d;">Hi, <?= ucfirst($display_name); ?></span>
                             <img class="user-avatar rounded-circle" src="<?=base_url("assets/avatar-1.png");?>" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
-
                             <a class="nav-link" href="<?=base_url("setting/change_password");?>"><i class="fa fa-key"></i> Ganti Password</a>
-
-                            <a class="nav-link" href="<?=base_url("setting/shop_info");?>"><i class="fa fa-cog"></i> Pengaturan</a>
-
                             <a class="nav-link" href="<?=base_url("auth/logout");?>"><i class="fa fa-power-off"></i> Logout</a>
                         </div>
                     </div>
