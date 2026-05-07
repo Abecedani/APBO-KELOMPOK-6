@@ -2,7 +2,7 @@
 
 Sistem informasi berbasis web yang dirancang untuk mengelola stok sparepart, transaksi pembelian, dan pelaporan pada bengkel. Project ini dikembangkan sebagai tugas besar untuk mata kuliah **Analisis dan Perancangan Berbasis Objek (APBO)** di **Teknik Informatika, Universitas Mataram**.
 
-![Logo CV Gaspol Rem Blong](cy-bengkel/img/logo.png)*
+![Logo CV Gaspol Rem Blong](cy-bengkel/img/baner.png)*
 ## 🚀 Fitur Utama
 - **Manajemen Sparepart**: Input, edit, dan hapus data stok barang.
 - **Sistem Pembelian**: Pencatatan stok masuk secara terorganisir.
@@ -41,9 +41,9 @@ Sebelum menjalankan project ini, pastikan sistem kamu sudah memenuhi syarat beri
 
 ## 👥 Tim Pengembang (Kelompok 6 - APBO)
 Project ini dikerjakan oleh:
-- **Ahmad Dani**
-- **Muhammad Farhan Maulana**
-- **Mustafida**
+- **Ahmad Dani - F1D02410140**
+- **Muhammad Farhan Maulana - F1D02410XXX**
+- **Mustafida F1D02410XXX**
 
 ---
 *Developed for Academic Purposes - Universitas Mataram 2026*
