@@ -162,11 +162,9 @@ if(!$authPage) {
                 <div class="col-sm-5">
                     <div class="user-area dropdown float-right">
                         
-                        <!-- Query Langsung ke Database untuk Tarik Nama User -->
                         <?php 
                             $user_id = $this->session->userdata('auth')['id'];
                             $user_data = $this->db->get_where('users', ['id' => $user_id])->row();
-                            // Ngecek ada kolom 'name' ga, kalau gaada pakai 'username'
                             $display_name = isset($user_data->name) ? $user_data->name : (isset($user_data->username) ? $user_data->username : 'User');
                         ?>
                         
