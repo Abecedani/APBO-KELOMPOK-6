@@ -87,12 +87,18 @@ if(!$authPage) {
                         <a href="<?=base_url("dashboard");?>"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
                     
-                  <!-- MENU TRANSAKSI: Di-hide dari Owner -->
-                  <?php if($user_role != 'owner'): ?>
+                  <!-- MENU TRANSAKSI: Hanya untuk Kasir dan Admin -->
+                  <?php if($user_role == 'kasir' || $user_role == 'admin'): ?>
                   <h3 class="menu-title">Transaksi</h3>
+                    
+                    <!-- Pagar 1: Tambah Transaksi HANYA untuk Kasir -->
+                    <?php if($user_role == 'kasir'): ?>
                     <li>
                         <a href="<?=base_url("transaction");?>"> <i class="menu-icon fa fa-plus-square"></i>Tambah Transaksi</a>
                     </li>
+                    <?php endif; ?>
+                    
+                    <!-- Pagar 2: Riwayat bisa dilihat Kasir dan Admin -->
                     <li>
                         <a href="<?=base_url("sparepart_sales");?>"> <i class="menu-icon fa fa-list"></i>Riwayat Penjualan</a>
                     </li>
