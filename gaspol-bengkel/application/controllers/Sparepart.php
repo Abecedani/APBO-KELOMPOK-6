@@ -18,30 +18,43 @@ class Sparepart extends CI_Controller {
     }
 
 
-	public function index()
-	{
+    public function index()
+    {
 
         $push = [
             "pageTitle" => "Sparepart",
             "dataAdmin" => $this->dataAdmin 
         ];
 
-		$this->load->view('header',$push);
-		$this->load->view('sparepart',$push);
-		$this->load->view('footer',$push);
+        $this->load->view('header',$push);
+        $this->load->view('sparepart',$push);
+        $this->load->view('footer',$push);
     }
     
     public function json() {
         $this->load->model("datatables");
         $this->datatables->setTable("products");
-        $this->datatables->setColumn([
+
+        // Ambil role dari session
+        $user_role = $this->session->userdata('auth')['role'];
+
+        // Susun kolom dasar yang semua role bisa liat
+        $columns = [
             '<index>',
             '<get-name>',
             '[rupiah=<get-price>]',
-            '<get-stock>',
-            '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>" data-name="<get-name>" data-price="<get-price>"><i class="fa fa-edit"></i></button>
-            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>'
-        ]);
+            '<get-stock>'
+        ];
+
+        // Kalau BUKAN owner, baru tambahin kolom Aksi (tombol Edit & Hapus)
+        if ($user_role != 'owner') {
+            $columns[] = '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>" data-name="<get-name>" data-price="<get-price>"><i class="fa fa-edit"></i></button>
+            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>';
+        }
+
+        // Masukin array kolom ke datatables
+        $this->datatables->setColumn($columns);
+        
         $this->datatables->setOrdering(["id","name","price","stock",NULL]);
         $this->datatables->setWhere("type","sparepart");
         $this->datatables->setSearchField("name");

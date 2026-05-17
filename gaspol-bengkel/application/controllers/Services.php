@@ -18,29 +18,42 @@ class Services extends CI_Controller {
     }
 
 
-	public function index()
-	{
+    public function index()
+    {
 
         $push = [
             "pageTitle" => "Data Services",
             "dataAdmin" => $this->dataAdmin 
         ];
 
-		$this->load->view('header',$push);
-		$this->load->view('services',$push);
-		$this->load->view('footer',$push);
+        $this->load->view('header',$push);
+        $this->load->view('services',$push);
+        $this->load->view('footer',$push);
     }
     
     public function json() {
         $this->load->model("datatables");
         $this->datatables->setTable("products");
-        $this->datatables->setColumn([
+
+        // Ambil role dari session
+        $user_role = $this->session->userdata('auth')['role'];
+
+        // Susun kolom dasar
+        $columns = [
             '<index>',
             '<get-name>',
-            '[rupiah=<get-price>]',
-            '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>" data-name="<get-name>" data-price="<get-price>"><i class="fa fa-edit"></i></button>
-            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>'
-        ]);
+            '[rupiah=<get-price>]'
+        ];
+
+        // Kalau BUKAN owner, tambahin kolom Aksi (tombol Edit & Hapus)
+        if ($user_role != 'owner') {
+            $columns[] = '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>" data-name="<get-name>" data-price="<get-price>"><i class="fa fa-edit"></i></button>
+            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>';
+        }
+
+        // Terapin kolomnya
+        $this->datatables->setColumn($columns);
+        
         $this->datatables->setOrdering(["id","name","price",NULL]);
         $this->datatables->setWhere("type","service");
         $this->datatables->setSearchField("name");

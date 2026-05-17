@@ -5,13 +5,7 @@ if(!isset($authPage)) {
 ?>
 
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!-->
 <html class="no-js" lang="en">
-<!--<![endif]-->
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -65,8 +59,6 @@ if(!isset($authPage)) {
 if(!$authPage) {
 ?>
 
-    <!-- Left Panel -->
-
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
 
@@ -79,7 +71,6 @@ if(!$authPage) {
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
-                <!-- Ambil Role dari Session -->
                 <?php $user_role = $this->session->userdata('auth')['role']; ?>
                 
                 <ul class="nav navbar-nav">
@@ -87,27 +78,21 @@ if(!$authPage) {
                         <a href="<?=base_url("dashboard");?>"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                     </li>
                     
-                  <!-- MENU TRANSAKSI: Hanya untuk Kasir dan Admin -->
-                  <?php if($user_role == 'kasir' || $user_role == 'admin'): ?>
                   <h3 class="menu-title">Transaksi</h3>
                     
-                    <!-- Pagar 1: Tambah Transaksi HANYA untuk Kasir -->
                     <?php if($user_role == 'kasir'): ?>
                     <li>
                         <a href="<?=base_url("transaction");?>"> <i class="menu-icon fa fa-plus-square"></i>Tambah Transaksi</a>
                     </li>
                     <?php endif; ?>
                     
-                    <!-- Pagar 2: Riwayat bisa dilihat Kasir dan Admin -->
                     <li>
                         <a href="<?=base_url("sparepart_sales");?>"> <i class="menu-icon fa fa-list"></i>Riwayat Penjualan</a>
                     </li>
                     <li>
                         <a href="<?=base_url("service_sales");?>"> <i class="menu-icon fa fa-list"></i>Riwayat Service</a>
                     </li>
-                  <?php endif; ?>
 
-                  <!-- MENU DATA MASTER: Hanya untuk Admin dan Owner -->
                   <?php if($user_role == 'admin' || $user_role == 'owner'): ?>
                   <h3 class="menu-title">Data & Laporan</h3>
                     <li>
@@ -124,7 +109,6 @@ if(!$authPage) {
                     </li>
                   <?php endif; ?>
 
-                  <!-- MENU LAPORAN: Hanya untuk Owner dan Admin -->
                   <?php if($user_role == 'owner' || $user_role == 'admin'): ?>
                     <h3 class="menu-title">Laporan</h3>
                     <li>
@@ -138,17 +122,9 @@ if(!$authPage) {
                     </li>
                   <?php endif; ?>
                 </ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>
-    </aside><!-- /#left-panel -->
+            </div></nav>
+    </aside><div id="right-panel" class="right-panel">
 
-    <!-- Left Panel -->
-
-    <!-- Right Panel -->
-
-    <div id="right-panel" class="right-panel">
-
-        <!-- Header-->
         <header id="header" class="header">
 
             <div class="header-menu">
@@ -181,7 +157,4 @@ if(!$authPage) {
                 </div>
             </div>
 
-        </header><!-- /header -->
-        <!-- Header-->
-
-<?php } ?>
+        </header><?php } ?>

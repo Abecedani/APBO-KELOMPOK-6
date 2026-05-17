@@ -18,30 +18,43 @@ class Supplier extends CI_Controller {
     }
 
 
-	public function index()
-	{
+    public function index()
+    {
 
         $push = [
             "pageTitle" => "Supplier",
             "dataAdmin" => $this->dataAdmin 
         ];
 
-		$this->load->view('header',$push);
-		$this->load->view('supplier',$push);
-		$this->load->view('footer',$push);
+        $this->load->view('header',$push);
+        $this->load->view('supplier',$push);
+        $this->load->view('footer',$push);
     }
     
-    public function json() {
+  public function json() {
         $this->load->model("datatables");
         $this->datatables->setTable("suppliers");
-        $this->datatables->setColumn([
+
+        // Ambil role dari session
+        $user_role = $this->session->userdata('auth')['role'];
+
+        // Susun kolom dasar yang semua role bisa liat
+        $columns = [
             '<index>',
             '<get-name>',
             '<get-address>',
-            '<get-telephone>',
-            '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>"><i class="fa fa-edit"></i></button>
-            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>'
-        ]);
+            '<get-telephone>'
+        ];
+
+        // Kalau BUKAN owner, baru tambahin kolom Aksi (tombol Edit & Hapus) ke dalam array
+        if ($user_role != 'owner') {
+            $columns[] = '<div class="text-center"><button type="button" class="btn btn-primary btn-sm btn-edit" data-id="<get-id>"><i class="fa fa-edit"></i></button>
+            <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="<get-id>" data-name="<get-name>"><i class="fa fa-trash"></i></button></div>';
+        }
+
+        // Masukin array kolom yang udah dirakit ke datatables
+        $this->datatables->setColumn($columns);
+        
         $this->datatables->setOrdering(["id","name","address","telephone",NULL]);
         $this->datatables->setSearchField("name");
         $this->datatables->generate();

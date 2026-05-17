@@ -35,7 +35,9 @@
                                     <th>Nama</th>
                                     <th>Alamat</th>
                                     <th>No. Telp</th>
+                                    <?php if($this->session->userdata('auth')['role'] != 'owner'): ?>
                                     <th>Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                         </table>

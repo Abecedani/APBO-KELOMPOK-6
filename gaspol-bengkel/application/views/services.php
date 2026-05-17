@@ -34,7 +34,10 @@
                                     <th style="width:10%">#</th>
                                     <th>Nama</th>
                                     <th>Harga</th>
+                            
+                                    <?php if($this->session->userdata('auth')['role'] != 'owner'): ?>
                                     <th>Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                         </table>
