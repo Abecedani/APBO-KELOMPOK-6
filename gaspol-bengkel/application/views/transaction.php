@@ -1,4 +1,4 @@
-        <div class="breadcrumbs">
+<div class="breadcrumbs">
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md-5 col-sm-12">
 
-                    <div class="card" id="customerContainer"  style="display:none;background:#000">
+                    <div class="card" id="customerContainer" style="display:none;background:#000">
                         <div class="card-header">
                             <b>Data Pelanggan</b>
                         </div>
@@ -61,6 +61,22 @@
                             <div class="form-group">
                                 <label>No. Plat</label>
                                 <input type="text" name="plat" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="customerSparepartContainer" style="display:none">
+                        <div class="card-header">
+                            <b>Data Pelanggan <small class="text-muted">(Opsional)</small></b>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Nama Pelanggan</label>
+                                <input type="text" name="customer_sparepart" class="form-control form-control-sm" >
+                            </div>
+                            <div class="form-group">
+                                <label>No. Plat</label>
+                                <input type="text" name="plat_sparepart" class="form-control form-control-sm">
                             </div>
                         </div>
                     </div>
@@ -78,12 +94,11 @@
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
+
                     <div class="card" id="sparepartCartContainer" style="display:none">
                         <div class="card-header">
                             <b>Sparepart</b>
@@ -97,12 +112,11 @@
                                         <th class="text-center">Qty</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
+
                     <div class="card">
                         <div class="card-header">
                             <b>Detail Pembayaran</b>
@@ -114,6 +128,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="d-flex mb-4" style="box-sizing:border-box">
                         <div class="col-6 p-0 pr-1">
                             <button type="button" class="btn btn-secondary btn-block" onclick="reset()">Batal</button>
@@ -179,86 +194,79 @@
             var SparepartCart = [];
             var total = 0;
             var type = "";
-            
+
             function addServiceCart(data){
                 var before = ServiceCart;
                 var qty = 1;
-
                 if(before[data.id]) {
                     qty = before[data.id]["qty"] + 1;
                 } else {
                     before[data.id] = data;
                 }
-                
                 before[data.id]["qty"] = qty;
                 ServiceCart = before;
-                
-                refreshServiceCart(ServiceCart,SparepartCart);
+                refreshServiceCart(ServiceCart, SparepartCart);
             }
 
             function addSparepartCart(data) {
                 var before = SparepartCart;
                 var qty = 1;
-
                 if(before[data.id]) {
                     qty = before[data.id]["qty"] + 1;
                 }
-
                 if(qty <= data.stock) {
                     if(!before[data.id]) {
                         before[data.id] = data;
                     }
                     before[data.id]["qty"] = qty;
                 } else {
-                    Swal.fire(
-                        'Gagal',
-                        'Stok tidak cukup',
-                        'error'
-                    )
+                    Swal.fire('Gagal', 'Stok tidak cukup', 'error');
                 }
-
                 SparepartCart = before;
-
-                refreshServiceCart(ServiceCart,SparepartCart);
+                refreshServiceCart(ServiceCart, SparepartCart);
             }
 
-            function refreshServiceCart(data1,data2) {
+            function refreshServiceCart(data1, data2) {
                 var html1 = "";
                 var html2 = "";
                 var countTotal = 0;
-                data1 = data1.filter(function (el) {
-                    return el != null;
-                });
-                data2 = data2.filter(function (el) {
-                    return el != null;
+
+                data1 = data1.filter(function(el) { return el != null; });
+                data2 = data2.filter(function(el) { return el != null; });
+
+                data1.forEach(function(item) {
+                    html1 += '<tr><td>'+item.name+'</td><td>Rp '+item.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'</td><td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="deleteServiceCart('+item.id+')"><i class="fa fa-times"></i></button></td></tr>';
+                    countTotal += (item.price * item.qty);
                 });
 
-                data1.forEach(function(item,index){
-                    html1 += '<tr><td>'+item.name+'</td><td >Rp '+item.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'</td><td class="text-center"><button type="button" class="btn btn-sm btn-danger" onclick="deleteServiceCart('+item.id+')"><i class="fa fa-times"></i></button></td></tr>';
-
-                    countTotal = (countTotal + (item.price * item.qty));
-                })
-                data2.forEach(function(item,index){
-                    html2 += '<tr><td>'+item.name+'</td><td >Rp '+item.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'</td><td class="text-center"><input type="number" style="width:52px" value="'+item.qty+'" class="change-qty" data-id="'+item.id+'" data-stock="'+item.stock+'"/></td></tr>';
-                    countTotal = (countTotal + (item.price * item.qty));
-                    console.log(item.stock);
-                })
+                data2.forEach(function(item) {
+                    html2 += '<tr><td>'+item.name+'</td><td>Rp '+item.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')+'</td><td class="text-center"><input type="number" style="width:52px" value="'+item.qty+'" class="change-qty" data-id="'+item.id+'" data-stock="'+item.stock+'"/></td></tr>';
+                    countTotal += (item.price * item.qty);
+                });
 
                 total = countTotal;
 
                 if(data1.length) {
                     jQuery("#serviceCartContainer").attr("style","display:block");
                     jQuery("#customerContainer").attr("style","display:block");
+                    jQuery("#customerSparepartContainer").attr("style","display:none");
                     type = "service";
                 } else {
                     jQuery("#serviceCartContainer").attr("style","display:none");
                     jQuery("#customerContainer").attr("style","display:none");
                     type = "sparepart";
                 }
+
                 if(data2.length) {
                     jQuery("#sparepartCartContainer").attr("style","display:block");
+                    if(type != "service") {
+                        jQuery("#customerSparepartContainer").attr("style","display:block");
+                    }
                 } else {
                     jQuery("#sparepartCartContainer").attr("style","display:none");
+                    if(type != "service") {
+                        jQuery("#customerSparepartContainer").attr("style","display:none");
+                    }
                 }
 
                 jQuery("#serviceCart tbody").html(html1);
@@ -268,81 +276,64 @@
 
             function deleteServiceCart(id) {
                 delete ServiceCart[id];
-                
-                refreshServiceCart(ServiceCart,SparepartCart);
+                refreshServiceCart(ServiceCart, SparepartCart);
             }
 
-            $("body").on('change','.change-qty',function(){
+            $("body").on('change', '.change-qty', function(){
                 var before = SparepartCart;
                 var qty = jQuery(this).val();
                 var id = jQuery(this).attr("data-id");
                 var stock = parseInt(jQuery(this).attr("data-stock"));
-                
+
                 if(qty <= stock) {
                     before[id]["qty"] = qty;
                 } else {
-                    Swal.fire(
-                        'Gagal',
-                        'Stok tidak cukup',
-                        'error'
-                    )
+                    Swal.fire('Gagal', 'Stok tidak cukup', 'error');
                 }
                 if(qty <= 0) {
                     delete before[id];
                 }
                 SparepartCart = before;
-
-                refreshServiceCart(ServiceCart,SparepartCart);
-            })
+                refreshServiceCart(ServiceCart, SparepartCart);
+            });
 
             function reset() {
-                jQuery("#customerContainer input").val("");
+                jQuery("input[name=customer]").val("");
+                jQuery("input[name=plat]").val("");
+                jQuery("input[name=customer_sparepart]").val("");
+                jQuery("input[name=plat_sparepart]").val("");
                 ServiceCart = [];
                 SparepartCart = [];
-
-                jQuery("#dataTable").DataTable().ajax.reload(null,true);
-
-                refreshServiceCart(ServiceCart,SparepartCart);
+                jQuery("#dataTable").DataTable().ajax.reload(null, true);
+                refreshServiceCart(ServiceCart, SparepartCart);
             }
 
             function saveModal() {
                 if(!total) {
-                    Swal.fire(
-                        'Gagal',
-                        'Keranjang kosong',
-                        'error'
-                    )
+                    Swal.fire('Gagal', 'Keranjang kosong', 'error');
                 } else {
                     jQuery("#purchaseModal").modal("toggle");
                 }
             }
 
-            $("#money").on("keyup",function(){
-                var value = jQuery(this);
-
-                var change = parseInt(value.val()) - total;
-
+            $("#money").on("keyup", function(){
+                var change = parseInt(jQuery(this).val()) - total;
                 if(change < 0) {
                     change = "Belum cukup";
-                    jQuery(".btn-save-confirm").prop("disabled",true);
+                    jQuery(".btn-save-confirm").prop("disabled", true);
                 } else {
-                    jQuery(".btn-save-confirm").prop("disabled",false);
+                    jQuery(".btn-save-confirm").prop("disabled", false);
                 }
-
                 jQuery("#change").val(change.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-            })
+            });
 
-            $(".btn-save-confirm").on("click",function(){
+            $(".btn-save-confirm").on("click", function(){
 
-                if(type == "sparepart") {
-                    var url = "<?=base_url("transaction/insert/sparepart");?>";
-                } else {
-                    var url = "<?=base_url("transaction/insert/service");?>";
-                }
+                var url = (type == "sparepart")
+                    ? "<?=base_url("transaction/insert/sparepart");?>"
+                    : "<?=base_url("transaction/insert/service");?>";
 
-                var itemSparepart = SparepartCart.filter(function (el) {
-                    return el != null;
-                });
+                var itemSparepart = SparepartCart.filter(function(el) { return el != null; });
 
                 var form = {};
                 form["total"] = total;
@@ -351,17 +342,16 @@
                 if(type == "service") {
                     form["customer"] = jQuery("input[name=customer]").val();
                     form["plat"] = jQuery("input[name=plat]").val();
-                    form["service"] = ServiceCart.filter(function (el) {
-                        return el != null;
-                    });
+                    form["service"] = ServiceCart.filter(function(el) { return el != null; });
+                } else {
+                    form["customer"] = jQuery("input[name=customer_sparepart]").val();
+                    form["plat"] = jQuery("input[name=plat_sparepart]").val();
                 }
-
-                form = JSON.stringify(form);
 
                 jQuery.ajax({
                     url: url,
                     method: "POST",
-                    data: form,
+                    data: JSON.stringify(form),
                     dataType: "json",
                     processData: false,
                     contentType: false,
@@ -372,11 +362,7 @@
                             jQuery("#change").val("");
                             jQuery("#money").val("");
                             if(data.type == "sparepart") {
-                                Swal.fire(
-                                    "Berhasil",
-                                    data.msg,
-                                    "success"
-                                );
+                                Swal.fire("Berhasil", data.msg, "success");
                             } else {
                                 Swal.fire({
                                     title: 'Berhasil',
@@ -387,13 +373,13 @@
                                     cancelButtonColor: '#d33',
                                     cancelButtonText: 'Lanjutkan',
                                     confirmButtonText: 'Cetak Invoice'
-                                    }).then((result) => {
-                                        location.href="<?=base_url("service_sales/print");?>/"+data.id;
-                                })
+                                }).then((result) => {
+                                    location.href="<?=base_url("service_sales/print");?>/"+data.id;
+                                });
                             }
                         }
                     }
                 });
-            })
+            });
 
         </script>

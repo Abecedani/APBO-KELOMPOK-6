@@ -34,13 +34,17 @@ class Transaction extends CI_Controller {
     function insert($action = "sparepart") {
         $data = json_decode($this->input->raw_input_stream,TRUE);
 
-        $customer = NULL;
-        $plat = NULL;
+    $customer = NULL;
+    $plat = NULL;
 
-        if($action == "service") {
-            $customer = $data['customer'];
-            $plat = $data['plat'];
-        }
+    if($action == "service") {
+        $customer = $data['customer'];
+        $plat = $data['plat'];
+    } else {
+        $customer = isset($data['customer']) && $data['customer'] != '' ? $data['customer'] : NULL;
+        $plat = isset($data['plat']) && $data['plat'] != '' ? $data['plat'] : NULL;
+    }
+
         
         $push = [
             "id" => NULL,
