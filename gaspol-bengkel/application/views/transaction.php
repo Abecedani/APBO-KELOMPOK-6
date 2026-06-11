@@ -152,6 +152,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
+                            <label>Total</label>
+                            <input type="text" id="modal_total" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
                             <label>Bayar</label>
                             <input type="text" id="money" class="form-control">
                         </div>
@@ -312,6 +316,8 @@
                 if(!total) {
                     Swal.fire('Gagal', 'Keranjang kosong', 'error');
                 } else {
+                    var formattedTotal = "Rp " + total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                    jQuery("#modal_total").val(formattedTotal);
                     jQuery("#purchaseModal").modal("toggle");
                 }
             }
